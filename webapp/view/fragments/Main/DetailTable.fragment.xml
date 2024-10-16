@@ -11,7 +11,7 @@
 >
     <t:Table
         id="T_DetailTable"
-        fixedColumnCount="1"
+        fixedColumnCount="0"
         selectionMode="None"
         showOverlay="{viewModel>/MainTable/showOverlay}"
         ariaLabelledBy="title"
