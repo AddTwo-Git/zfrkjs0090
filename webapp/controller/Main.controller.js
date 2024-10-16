@@ -95,6 +95,12 @@ sap.ui.define(
             case "fcOpenFriend":
               this._fcOpenFriend(event);
               break;
+            case "fcCreate":
+              this._fcCreate(event);
+              break;
+            case "fcDelete":
+              this._fcDelete(event);
+              break;
             case "fcRefresh":
               this._fcRefresh(event);
               break;
@@ -288,9 +294,42 @@ sap.ui.define(
         //Gender Filter
         const aFilterGender = this.viewModel.getFilterGender() || [];
 
-        return aMainTab.filter((oData) =>
-          aFilterGender.length > 0 ? aFilterGender.includes(oData.Gender) : true
+        return _.map(
+          aMainTab.filter((oData) =>
+            aFilterGender.length > 0
+              ? aFilterGender.includes(oData.Gender)
+              : true
+          ),
+          (obj) => {
+            const aFieldsToCheck = [
+              "Gender",
+              "UserName",
+              "FirstName",
+              "LastName",
+              "Emails",
+              "AddressInfo",
+            ];
+
+            const bFieldEmpty = aFieldsToCheck.some(
+              (field) => !obj[field] || obj[field].length === 0
+            );
+
+            const vState = bFieldEmpty ? "E" : "C";
+
+            return {
+              ...obj,
+              ...{
+                State: vState,
+              },
+            };
+          }
         );
+
+        // const aResult = aMainTab.filter((oData) =>
+        //   aFilterGender.length > 0 ? aFilterGender.includes(oData.Gender) : true
+        // );
+
+        // return aResult;
       },
 
       _fcPostProupdateScreenData: function (bActionRefresh) {
@@ -376,7 +415,7 @@ sap.ui.define(
                 const aNewResult = _.sortBy(
                   this._fcProcDetailTableItems(aDetailTab, oBestFriend),
                   "FriendShip"
-                ).reverse();
+                );
 
                 this.viewModel.setDetailTableItems(aNewResult);
 
@@ -451,6 +490,41 @@ sap.ui.define(
           return;
         } else {
           this._updateScreenDataDetail(aSelectedData.UserName);
+        }
+      },
+
+      _fcCreate: function (event) {
+        if (this.viewModel.getIsSearched()) {
+          this.viewModel.addInitLine();
+          this.viewModel.setMainTableEdited(true);
+        } else {
+          this.showError(this.getI18nText("ErrMsg003"));
+        }
+      },
+
+      _fcDelete: function (event) {
+        const aSelectedRows = this._fcGetSelectedMainTableDataCM();
+
+        if (aSelectedRows && _.includes(["N"], aSelectedRows.State)) {
+          const bLocal = aSelectedRows.State == "N",
+            vMsg = bLocal ? "InfoMsg05" : "InfoMsg06";
+          this.callPopupConfirm(vMsg, "warning").then(
+            function (result) {
+              if (result === "OK") {
+                if (bLocal) {
+                  this.viewModel.delMainTableLinebyPath(
+                    this._fcGetSelectedMainTablePathCM()
+                  );
+                } else {
+                  this._fcCallDelete(aSelectedRows);
+                }
+              }
+            }.bind(this)
+          );
+        } else if (aSelectedRows) {
+          this.showError(this.getI18nText("ErrMsg008"));
+        } else {
+          this.showError(this.getI18nText("ErrMsg007"));
         }
       },
 
@@ -530,6 +604,24 @@ sap.ui.define(
           UserName: UserName,
         });
       },
+
+      /**********************************************************************************
+       * Edit Line
+       **********************************************************************************/
+      _fcCheckLineEdited: function (sPath) {
+        this.viewModel.checkMainTableLineEdited(sPath);
+        const bAnyLineEdited = this._fcIsAnyLineEdited();
+        this.viewModel.setEnabledSaveBtn(bAnyLineEdited);
+      },
+
+      _fcIsAnyLineEdited: function () {
+        const aTableRowData = this.getView()
+          .getModel("viewModel")
+          .getProperty("/MainTable/Items");
+
+        return aTableRowData.some((row) => row.chngFlag === true);
+      },
+
 
       /*******************************************************************
        * Download Spread Sheet
@@ -638,26 +730,7 @@ sap.ui.define(
                 aUniGenders.push({ Gender: oData.Gender });
               }
               return aUniGenders;
-            }, []);
-            // const aNewResult = aMainTab
-            //   .filter(
-            //     (oData) =>
-            //       Array.isArray(oData.AddressInfo) &&
-            //       oData.AddressInfo.length > 0
-            //   )
-            //   .map((oData) => ({
-            //     City: oData.AddressInfo[0].City.Name,
-            //     CountryRegion: oData.AddressInfo[0].City.CountryRegion,
-            //   }))
-            //   .filter(
-            //     (oCity, index, self) =>
-            //       index ===
-            //       self.findIndex(
-            //         (result) =>
-            //           result.City === oCity.City &&
-            //           result.CountryRegion === oCity.CountryRegion
-            //       )
-            //   );
+            }, []); 
 
             this.viewModel.setMainTableMultiComboBoxItems(aNewResult);
           })

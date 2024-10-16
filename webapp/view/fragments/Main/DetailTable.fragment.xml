@@ -11,7 +11,8 @@
 >
     <t:Table
         id="T_DetailTable"
-        fixedColumnCount="0"
+        fixedColumnCount="1"
+        visibleRowCount="3"
         selectionMode="None"
         showOverlay="{viewModel>/MainTable/showOverlay}"
         ariaLabelledBy="title"
@@ -90,6 +91,63 @@
                                 'viewModel>FirstName'
                             ]
                         }"
+                        maxLines="1"
+                    />
+                </t:template>
+            </t:Column>
+
+            <!-- 이름 -->
+            <t:Column 
+                hAlign="Center"
+                width="130px"
+                visible="{viewModel>/ColSettings/ColInfo/UserName/visible}"
+                headerMenu="menu"
+                sortProperty="FirstName"
+                filterProperty="FirstName"
+            >
+                <Label text="{i18n>detail_list_FirstName}" />
+                <t:template>
+                    <Text
+                        text="{viewModel>FirstName}"
+                        tooltip="{viewModel>FirstName}"
+                        maxLines="1"
+                    />
+                </t:template>
+            </t:Column>
+
+            <!-- 중간 이름 -->
+            <t:Column 
+                hAlign="Center"
+                width="130px"
+                visible="{viewModel>/ColSettings/ColInfo/UserName/visible}"
+                headerMenu="menu"
+                sortProperty="MiddleName"
+                filterProperty="MiddleName"
+            >
+                <Label text="{i18n>detail_list_MiddleName}" />
+                <t:template>
+                    <Text
+                        text="{viewModel>MiddleName}"
+                        tooltip="{viewModel>MiddleName}"
+                        maxLines="1"
+                    />
+                </t:template>
+            </t:Column>
+
+            <!-- 성 -->
+            <t:Column 
+                hAlign="Center"
+                width="130px"
+                visible="{viewModel>/ColSettings/ColInfo/UserName/visible}"
+                headerMenu="menu"
+                sortProperty="LastName"
+                filterProperty="LastName"
+            >
+                <Label text="{i18n>detail_list_LastName}" />
+                <t:template>
+                    <Text
+                        text="{viewModel>LastName}"
+                        tooltip="{viewModel>LastName}"
                         maxLines="1"
                     />
                 </t:template>

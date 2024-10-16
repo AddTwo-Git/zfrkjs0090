@@ -27,9 +27,12 @@ sap.ui.define(
       },
 
       Search: {
-        City: [],
         UserName: [],
         Gender: [],
+        City: [],
+        Country: [],
+        Address: [],
+        Region: [],
       },
 
       ValueState: {
@@ -67,9 +70,34 @@ sap.ui.define(
           N: "Neutral",
         },
 
-        StateName: {
-          E: "가격이 비싸다",
-          C: "가격이 적당하다",
+        Editable: {
+          N: {
+            Gender: true,
+            UserName: false,
+            FirstName: true,
+            MiddleName: true,
+            LastName: true,
+            Emails: true,
+            AddressInfo: true,
+          },
+          E: {
+            Gender: false,
+            UserName: false,
+            FirstName: false,
+            MiddleName: true,
+            LastName: false,
+            Emails: true,
+            AddressInfo: true,
+          },
+          C: {
+            Gender: false,
+            UserName: false,
+            FirstName: false,
+            MiddleName: false,
+            LastName: false,
+            Emails: false,
+            AddressInfo: false,
+          },
         },
       },
 
@@ -344,6 +372,45 @@ sap.ui.define(
         this.model.setProperty("/MainTable/IsSearched", bBool);
       },
 
+      addInitLine() {
+        const aMainTab = _.cloneDeep(this.getMainTableItems());
+        const aNewTab = _.concat(
+          [
+            {
+              State: "N",
+              Gender: this.getFilterGender(),
+              Address: this.getFilterAddress(),
+              CountryRegion: this.getFilterCountry(),
+              Name: this.getFilterCity(),
+              Region: this.getFilterRegion(),
+              CompTrgt: {
+                State: "N",
+                Gender: this.getFilterGender(),
+                Address: this.getFilterAddress(),
+                CountryRegion: this.getFilterCountry(),
+                Name: this.getFilterCity(),
+                Region: this.getFilterRegion(),
+              },
+            },
+          ],
+          aMainTab
+        );
+        this.setMainTableItems(aNewTab);
+        this.setMainTableItemsLength(aNewTab);
+      },
+
+      delMainTableLinebyPath(vPath) {
+        const aMainTab = this.getMainTableItems(),
+          vIdx = Number(_.last(_.split(vPath, "/"))),
+          aNewTab = _.concat(
+            _.slice(aMainTab, 0, vIdx),
+            _.slice(aMainTab, vIdx + 1)
+          );
+
+        this.setMainTableItems(aNewTab);
+        this.setMainTableItemsLength(aNewTab);
+      },
+
       /*******************************************************************
        * DetailTable
        *******************************************************************/
@@ -375,6 +442,14 @@ sap.ui.define(
         return this.model.getProperty("/Search");
       },
 
+      getFilterUserName() {
+        return this.model.getProperty("/Search/UserName");
+      },
+
+      setFilterUserName(aToken) {
+        this.model.setProperty("/Search/UserName", aToken);
+      },
+
       getFilterGender() {
         return this.model.getProperty("/Search/Gender");
       },
@@ -391,14 +466,29 @@ sap.ui.define(
         this.model.setProperty("/Search/City", selUsers);
       },
 
-      getFilterUserName() {
-        return this.model.getProperty("/Search/UserName");
+      getFilterCountry() {
+        return this.model.getProperty("/Search/Country");
       },
 
-      setFilterUserName(aToken) {
-        this.model.setProperty("/Search/UserName", aToken);
+      setFilterCountry(selUsers) {
+        this.model.setProperty("/Search/Country", selUsers);
       },
 
+      getFilterAddress() {
+        return this.model.getProperty("/Search/Address");
+      },
+
+      setFilterAddress(selUsers) {
+        this.model.setProperty("/Search/Address", selUsers);
+      },
+
+      getFilterRegion() {
+        return this.model.getProperty("/Search/Region");
+      },
+
+      setFilterRegion(selUsers) {
+        this.model.setProperty("/Search/Region", selUsers);
+      },
       /******************************************************************
        * Value State
        ******************************************************************/

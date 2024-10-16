@@ -60,6 +60,21 @@
                     app:fcCode="fcOpenFriend"
                 />
                 <Button
+                    text="{i18n>main_list_btn_Create}"
+                    type="Ghost"
+                    press=".onPAI"
+                    app:fcCode="fcCreate"
+                    enabled="true"
+                />
+                <Button
+                    text="{i18n>main_list_btn_Delete}"
+                    type="Ghost"
+                    press=".onPAI"
+                    app:fcCode="fcDelete"
+                    enabled="true"
+                    visible="{= !(%{viewModel>/MainTable/DelBtnMode})}"
+                />
+                <Button
                     icon="sap-icon://refresh"
                     type="Ghost"
                     press=".onPAI"
@@ -87,14 +102,21 @@
             >
                 <Label text="{i18n>main_list_Gender}" />
                 <t:template>
-                    <Text text="{viewModel>Gender}" />
+                    <Input
+                        textAlign="Center"
+                        value="{viewModel>Gender}"
+                        change="onPAI"
+                        app:fcCode="fcTableGender"
+                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['FirstName']}"
+                    />
+                    <!-- <Text text="{viewModel>Gender}" /> -->
                 </t:template>
             </t:Column>
 
-            <!-- 이름 -->
+            <!-- 성명 -->
             <t:Column
                 id="UserName"
-                hAlign="Begin"
+                hAlign="Center"
                 width="160px"
                 visible="{viewModel>/ColSettings/ColInfo/UserName/visible}"
                 headerMenu="menu"
@@ -123,10 +145,91 @@
                 </t:template>
             </t:Column>
 
+            <!-- 이름 -->
+            <t:Column
+                id="FirstName"
+                hAlign="Center"
+                width="130px"
+                visible="{viewModel>/ColSettings/ColInfo/UserName/visible}"
+                headerMenu="menu"
+                sortProperty="FirstName"
+                filterProperty="FirstName"
+            >
+                <Label text="{i18n>main_list_FirstName}" />
+                <t:template>
+                    <Input
+                        textAlign="Begin"
+                        value="{viewModel>FirstName}"
+                        change="onPAI"
+                        app:fcCode="fcTableFirstName"
+                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['FirstName']}"
+                    />
+                    <!-- <Text
+                        text="{viewModel>FirstName}"
+                        tooltip="{viewModel>FirstName}"
+                        maxLines="1"
+                    /> -->
+                </t:template>
+            </t:Column>
+
+            <!-- 중간 이름 -->
+            <t:Column
+                id="MiddleName"
+                hAlign="Center"
+                width="130px"
+                visible="{viewModel>/ColSettings/ColInfo/UserName/visible}"
+                headerMenu="menu"
+                sortProperty="MiddleName"
+                filterProperty="MiddleName"
+            >
+                <Label text="{i18n>main_list_MiddleName}" />
+                <t:template>
+                    <Input
+                        textAlign="Begin"
+                        value="{viewModel>MiddleName}"
+                        change="onPAI"
+                        app:fcCode="fcTableMiddleName"
+                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['MiddleName']}"
+                    />
+                    <!-- <Text
+                        text="{viewModel>MiddleName}"
+                        tooltip="{viewModel>MiddleName}"
+                        maxLines="1"
+                    /> -->
+                </t:template>
+            </t:Column>
+
+            <!-- 성 -->
+            <t:Column
+                id="LastName"
+                hAlign="Center"
+                width="130px"
+                visible="{viewModel>/ColSettings/ColInfo/UserName/visible}"
+                headerMenu="menu"
+                sortProperty="LastName"
+                filterProperty="LastName"
+            >
+                <Label text="{i18n>main_list_LastName}" />
+                <t:template>
+                    <Input
+                        textAlign="Begin"
+                        value="{viewModel>LastName}"
+                        change="onPAI"
+                        app:fcCode="fcTableLastName"
+                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['LastName']}"
+                    />
+                    <!-- <Text
+                        text="{viewModel>LastName}"
+                        tooltip="{viewModel>LastName}"
+                        maxLines="1"
+                    /> -->
+                </t:template>
+            </t:Column>
+
             <!-- 이메일 1 -->
             <t:Column
                 id="Emails_1"
-                hAlign="Center"
+                hAlign="Begin"
                 width="160px"
                 visible="{viewModel>/ColSettings/ColInfo/Emails/visible}"
                 headerMenu="menu"
@@ -135,18 +238,25 @@
             >
                 <Label text="{i18n>main_list_Emails1}" />
                 <t:template>
-                    <Text
+                    <Input
+                        textAlign="Begin"
+                        value="{viewModel>Emails/0}"
+                        change="onPAI"
+                        app:fcCode="fcTableEmails"
+                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['Emails']}"
+                    />
+                    <!-- <Text
                         text="{viewModel>Emails/0}"
                         tooltip="{viewModel>Emails/0}"
                         maxLines="1"
-                    />
+                    /> -->
                 </t:template>
             </t:Column>
 
             <!-- 이메일 1 -->
             <t:Column
                 id="Emails_2"
-                hAlign="Center"
+                hAlign="Begin"
                 width="160px"
                 visible="{viewModel>/ColSettings/ColInfo/Emails/visible}"
                 headerMenu="menu"
@@ -155,18 +265,25 @@
             >
                 <Label text="{i18n>main_list_Emails2}" />
                 <t:template>
-                    <Text
+                    <Input
+                        textAlign="Begin"
+                        value="{viewModel>Emails/1}"
+                        change="onPAI"
+                        app:fcCode="fcTableEmails"
+                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['Emails']}"
+                    />
+                    <!-- <Text
                         text="{viewModel>Emails/1}"
                         tooltip="{viewModel>Emails/1}"
                         maxLines="1"
-                    />
+                    /> -->
                 </t:template>
             </t:Column>
 
             <!-- 주소 -->
             <t:Column
                 id="Address"
-                hAlign="Center"
+                hAlign="Begin"
                 width="160px"
                 visible="{viewModel>/ColSettings/ColInfo/Address/visible}"
                 headerMenu="menu"
@@ -175,11 +292,18 @@
             >
                 <Label text="{i18n>main_list_Address}" />
                 <t:template>
-                    <Text
+                    <Input
+                        textAlign="Begin"
+                        value="{viewModel>AddressInfo/0/Address}"
+                        change="onPAI"
+                        app:fcCode="fcTableAddressInfo"
+                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['AddressInfo']}"
+                    />
+                    <!-- <Text
                         text="{viewModel>AddressInfo/0/Address}"
                         tooltip="{viewModel>AddressInfo/0/Address}"
                         maxLines="1"
-                    />
+                    /> -->
                 </t:template>
             </t:Column>
 
@@ -195,7 +319,14 @@
             >
                 <Label text="{i18n>main_list_CityCountryRegion}" />
                 <t:template>
-                    <Text text="{viewModel>AddressInfo/0/City/CountryRegion}" />
+                    <Input
+                        textAlign="Begin"
+                        value="{viewModel>AddressInfo/0/City/CountryRegion}"
+                        change="onPAI"
+                        app:fcCode="fcTableAddressInfo"
+                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['AddressInfo']}"
+                    />
+                    <!-- <Text text="{viewModel>AddressInfo/0/City/CountryRegion}" /> -->
                 </t:template>
             </t:Column>
 
@@ -211,7 +342,14 @@
             >
                 <Label text="{i18n>main_list_CityName}" />
                 <t:template>
-                    <Text text="{viewModel>AddressInfo/0/City/Name}" />
+                    <Input
+                        textAlign="Begin"
+                        value="{viewModel>AddressInfo/0/City/Name}"
+                        change="onPAI"
+                        app:fcCode="fcTableAddressInfo"
+                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['AddressInfo']}"
+                    />
+                    <!-- <Text text="{viewModel>AddressInfo/0/City/Name}" /> -->
                 </t:template>
             </t:Column>
 
@@ -227,7 +365,14 @@
             >
                 <Label text="{i18n>main_list_Region}" />
                 <t:template>
-                    <Text text="{viewModel>AddressInfo/0/City/Region}" />
+                    <Input
+                        textAlign="Begin"
+                        value="{viewModel>AddressInfo/0/City/Region}"
+                        change="onPAI"
+                        app:fcCode="fcTableAddressInfo"
+                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['AddressInfo']}"
+                    />
+                    <!-- <Text text="{viewModel>AddressInfo/0/City/Region}" /> -->
                 </t:template>
             </t:Column>
         </t:columns>
