@@ -1,0 +1,185 @@
+<core:FragmentDefinition
+    xmlns:uxap="sap.uxap"
+    xmlns="sap.m"
+    xmlns:t="sap.ui.table"
+    xmlns:u="sap.ui.unified"
+    xmlns:core="sap.ui.core"
+    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+>
+    <uxap:ObjectPageSection
+        title="{i18n>detail_list_sectionLbl002}"
+        titleUppercase="false"
+    >
+        <uxap:subSections>
+            <uxap:ObjectPageSubSection
+                class="sapUxAPObjectPageSubSectionFitContainer"
+            >
+                <t:Table
+                    id="T_TripTable"
+                    selectionMode="None"
+                    rowMode="Auto"
+                    rows="{
+                        path: 'viewModel>/DetailTable/Items',
+                        templateShareable: false
+                    }"
+                >
+                    <t:extension>
+                        <OverflowToolbar>
+                            <Title
+                                class="sapUiTinyMarginBeginEnd"
+                                text="{viewModel>/DetailTable/length} {i18n>detail_list_title}"
+                            />
+                            <ToolbarSpacer />
+                        </OverflowToolbar>
+                    </t:extension>
+                    <t:rowSettingsTemplate>
+                        <t:RowSettings highlight="{viewModel>State}" />
+                    </t:rowSettingsTemplate>
+                    <t:columns>
+                        <!-- 여행코드 TripId -->
+                        <t:Column
+                            hAlign="Center"
+                            width="80px"
+                        >
+                            <Label text="{i18n>detail_list_TripId}" />
+                            <t:template>
+                                <Text text="{viewModel>TripId}" />
+                            </t:template>
+                        </t:Column>
+                        <!-- 공유 ShareId -->
+                        <t:Column
+                            hAlign="Begin"
+                            width="130px"
+                        >
+                            <Label text="{i18n>detail_list_ShareId}" />
+                            <t:template>
+                                <Text
+                                    text="{viewModel>ShareId}"
+                                    tooltip="{viewModel>ShareId}"
+                                    maxLines="1"
+                                />
+                            </t:template>
+                        </t:Column>
+                        <!-- 여행명 TripName -->
+                        <t:Column
+                            hAlign="Center"
+                            width="130px"
+                        >
+                            <Label text="{i18n>detail_list_TripName}" />
+                            <t:template>
+                                <Text text="{viewModel>Name}" />
+                            </t:template>
+                        </t:Column>
+                        <!-- 설명 Description -->
+                        <t:Column
+                            hAlign="Begin"
+                            width="180px"
+                        >
+                            <Label text="{i18n>detail_list_Description}" />
+                            <t:template>
+                                <Text
+                                    text="{viewModel>Description}"
+                                    tooltip="{viewModel>Description}"
+                                    maxLines="1"
+                                />
+                            </t:template>
+                        </t:Column>
+                        <!-- 예산 Budget -->
+                        <t:Column
+                            hAlign="End"
+                            width="130px"
+                        >
+                            <Label text="{i18n>detail_list_Budget}" />
+                            <t:template>
+                                <Text
+                                    text="{
+                                        parts: [ 
+                                            'viewModel>Budget',
+                                            'viewModel>Currency'
+                                        ],
+                                        type: 'sap.ui.model.type.Currency',
+                                        formatOptions: {
+                                        showMeasure: true
+                                        }
+                                    }"
+                                />
+                            </t:template>
+                        </t:Column>
+                        <!-- 태그 Tags -->
+                        <t:Column
+                            hAlign="Center"
+                            width="150px"
+                        >
+                            <Label text="{i18n>detail_list_Tags}" />
+                            <t:template>
+                                <ScrollContainer horizontal="true">
+                                    <HBox>
+                                        <!-- !! 연산자는 값이 존재하는지의 여부를 불리언 값으로 반환 -->
+                                        <items>
+                                            <Button
+                                                text="{viewModel>Tags/0}"
+                                                visible="{= !!${viewModel>Tags/0} }"
+                                                press=".onPAI"
+                                                app:fcCode="fcOpenTag"
+                                            />
+                                            <Button
+                                                text="{viewModel>Tags/1}"
+                                                visible="{= !!${viewModel>Tags/1} }"
+                                                press=".onPAI"
+                                                app:fcCode="fcOpenTag"
+                                            />
+                                        </items>
+                                    </HBox>
+                                </ScrollContainer>
+                            </t:template>
+                        </t:Column>
+                        <!-- 시작일 StartsAt -->
+                        <t:Column
+                            hAlign="Begin"
+                            width="130px"
+                        >
+                            <Label text="{i18n>detail_list_StartsAt}" />
+                            <t:template>
+                                <Text
+                                    text="{
+                                        path: 'viewModel>StartsAt',
+                                        formatter: '.formatter.formatDate'
+                                    }"
+                                />
+                            </t:template>
+                        </t:Column>
+                        <!-- 종료일 EndsAt -->
+                        <t:Column
+                            hAlign="Begin"
+                            width="130px"
+                        >
+                            <Label text="{i18n>detail_list_EndsAt}" />
+                            <t:template>
+                                <Text
+                                    text="{
+                                        path: 'viewModel>EndsAt',
+                                        formatter: '.formatter.formatDate'
+                                    }"
+                                />
+                            </t:template>
+                        </t:Column>
+                        <t:Column
+                            hAlign="Center"
+                            width="130px"
+                        >
+                            <Label text="{i18n>detail_list_OpenTripUser}" />
+                            <t:template>
+                                <Button
+                                    icon="sap-icon://search"
+                                    press=".onPAI"
+                                    app:fcCode="fcOpenTripUser"
+                                    enabled="{= ${viewModel>State} !== 'Information' }"
+                                />
+                            </t:template>
+                        </t:Column>
+                    </t:columns>
+                </t:Table>
+            </uxap:ObjectPageSubSection>
+        </uxap:subSections>
+    </uxap:ObjectPageSection>
+</core:FragmentDefinition>

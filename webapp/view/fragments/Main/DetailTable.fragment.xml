@@ -1,0 +1,199 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:t="sap.ui.table"
+    xmlns:core="sap.ui.core"
+    xmlns:vm="sap.ui.fl.variants"
+    xmlns:columnmenu="sap.m.table.columnmenu"
+    xmlns:fl="sap.ui.fl"
+    xmlns:plugins="sap.ui.table.plugins"
+    xmlns:p13n="sap.m.p13n"
+    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+>
+    <t:Table
+        id="T_DetailTable"
+        fixedColumnCount="1"
+        selectionMode="None"
+        showOverlay="{viewModel>/MainTable/showOverlay}"
+        ariaLabelledBy="title"
+        rows="{
+            path: 'viewModel>/DetailTable/Items',
+            templateShareable: false
+        }"
+    >
+        <t:rowSettingsTemplate>
+            <t:RowSettings
+                highlight="{= %{viewModel>Chkdel}? 'Error' : %{viewModel>chngFlag}? 'Information' : 'None'}"
+            />
+        </t:rowSettingsTemplate>
+        <t:extension>
+            <OverflowToolbar>
+                <Title
+                    text="{viewModel>/DetailTable/length} {i18n>detail_list_title}"
+                    class="sapUiTinyMarginBeginEnd"
+                />
+            </OverflowToolbar>
+        </t:extension>
+        <t:columns>
+            <!-- 관계 -->
+            <t:Column
+                hAlign="Center"
+                width="100px"
+                visible="true"
+                headerMenu="menu"
+                sortProperty="Friendship"
+                filterProperty="Friendship"
+            >
+                <Label text="{i18n>detail_list_Friendship}" />
+                <t:template>
+                    <Text text="{viewModel>Friendship}" />
+                </t:template>
+            </t:Column>
+
+            <!-- 성별 -->
+            <t:Column
+                hAlign="Center"
+                width="100px"
+                visible="{viewModel>/ColSettings/ColInfo/Gender/visible}"
+                headerMenu="menu"
+                sortProperty="Gender"
+                filterProperty="Gender"
+            >
+                <Label text="{i18n>detail_list_Gender}" />
+                <t:template>
+                    <Text text="{viewModel>Gender}" />
+                </t:template>
+            </t:Column>
+
+            <!-- 이름 -->
+            <t:Column
+                hAlign="Begin"
+                width="160px"
+                visible="{viewModel>/ColSettings/ColInfo/UserName/visible}"
+                headerMenu="menu"
+                sortProperty="UserName"
+                filterProperty="UserName"
+            >
+                <Label text="{i18n>detail_list_UserName}" />
+                <t:template>
+                    <Text
+                        text="{
+                            parts: [
+                                'viewModel>LastName',
+                                'viewModel>MiddleName',
+                                'viewModel>FirstName'
+                            ]
+                        }"
+                        tooltip="{
+                            parts: [
+                                'viewModel>LastName',
+                                'viewModel>MiddleName',
+                                'viewModel>FirstName'
+                            ]
+                        }"
+                        maxLines="1"
+                    />
+                </t:template>
+            </t:Column>
+
+            <!-- 이메일 1 -->
+            <t:Column
+                hAlign="Center"
+                width="160px"
+                visible="{viewModel>/ColSettings/ColInfo/Emails/visible}"
+                headerMenu="menu"
+                sortProperty="Emails"
+                filterProperty="Emails"
+            >
+                <Label text="{i18n>detail_list_Emails1}" />
+                <t:template>
+                    <Text
+                        text="{viewModel>Emails/0}"
+                        maxLines="1"
+                    />
+                </t:template>
+            </t:Column>
+
+            <!-- 이메일 1 -->
+            <t:Column
+                hAlign="Center"
+                width="160px"
+                visible="{viewModel>/ColSettings/ColInfo/Emails/visible}"
+                headerMenu="menu"
+                sortProperty="Emails"
+                filterProperty="Emails"
+            >
+                <Label text="{i18n>detail_list_Emails2}" />
+                <t:template>
+                    <Text
+                        text="{viewModel>Emails/1}"
+                        maxLines="1"
+                    />
+                </t:template>
+            </t:Column>
+
+            <!-- 주소 -->
+            <t:Column
+                hAlign="Begin"
+                width="160px"
+                visible="{viewModel>/ColSettings/ColInfo/Address/visible}"
+                headerMenu="menu"
+                sortProperty="Address"
+                filterProperty="Address"
+            >
+                <Label text="{i18n>detail_list_Address}" />
+                <t:template>
+                    <Text
+                        text="{viewModel>AddressInfo/0/Address}"
+                        tooltip="{viewModel>AddressInfo/0/Address}"
+                        maxLines="1"
+                    />
+                </t:template>
+            </t:Column>
+
+            <!-- 국가 -->
+            <t:Column
+                hAlign="Center"
+                width="130px"
+                visible="{viewModel>/ColSettings/ColInfo/CityCountryRegion/visible}"
+                headerMenu="menu"
+                sortProperty="CityCountryRegion"
+                filterProperty="CityCountryRegion"
+            >
+                <Label text="{i18n>detail_list_CityCountryRegion}" />
+                <t:template>
+                    <Text text="{viewModel>AddressInfo/0/City/CountryRegion}" />
+                </t:template>
+            </t:Column>
+
+            <!-- 도시이름 -->
+            <t:Column
+                hAlign="Center"
+                width="130px"
+                visible="{viewModel>/ColSettings/ColInfo/CityName/visible}"
+                headerMenu="menu"
+                sortProperty="CityName"
+                filterProperty="CityName"
+            >
+                <Label text="{i18n>detail_list_CityName}" />
+                <t:template>
+                    <Text text="{viewModel>AddressInfo/0/City/Name}" />
+                </t:template>
+            </t:Column>
+
+            <!-- 지역 Region -->
+            <t:Column
+                hAlign="Center"
+                width="60px"
+                visible="{viewModel>/ColSettings/ColInfo/Region/visible}"
+                headerMenu="menu"
+                sortProperty="Region"
+                filterProperty="Region"
+            >
+                <Label text="{i18n>detail_list_CityRegion}" />
+                <t:template>
+                    <Text text="{viewModel>AddressInfo/0/City/Region}" />
+                </t:template>
+            </t:Column>
+        </t:columns>
+    </t:Table>
+</core:FragmentDefinition>

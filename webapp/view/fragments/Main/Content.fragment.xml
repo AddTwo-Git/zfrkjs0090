@@ -1,0 +1,35 @@
+<core:FragmentDefinition
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+    xmlns:uxap="sap.uxap"
+    xmlns:t="sap.ui.table"
+    xmlns:l="sap.ui.layout"
+    xmlns:plugins="sap.ui.table.plugins"
+>
+    <uxap:ObjectPageSection
+        titleUppercase="false"
+        title="{i18n>sectionLbl001}"
+    >
+        <uxap:ObjectPageSubSection>
+            <core:Fragment
+                fragmentName="readians.zfrkjs0090.view.fragments.Main.MainTable"
+                type="XML"
+            />
+        </uxap:ObjectPageSubSection>
+    </uxap:ObjectPageSection>
+
+    <uxap:ObjectPageSection
+        titleUppercase="false"
+        title="{i18n>sectionLbl002}"
+    >
+        <uxap:ObjectPageSubSection>
+            <core:Fragment
+                fragmentName="readians.zfrkjs0090.view.fragments.Main.DetailTable"
+                type="XML"
+            />
+        </uxap:ObjectPageSubSection>
+    </uxap:ObjectPageSection> 
+</core:FragmentDefinition>

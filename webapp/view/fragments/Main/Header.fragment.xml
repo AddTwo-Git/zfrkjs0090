@@ -1,0 +1,76 @@
+<core:FragmentDefinition
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+>
+    <fb:FilterBar
+        id="FB_Main"
+        useToolbar="false"
+        search="onPAI"
+        filterChange="onPAI"
+        app:fcCode="fcFilterControlCM"
+    >
+        <fb:filterGroupItems>
+            <!-- 이름 -->
+            <fb:FilterGroupItem
+                id="FGI_UserName"
+                name="UserName"
+                groupName="UserName"
+                label="{i18n>main_list_UserName}"
+                groupTitle="{i18n>main_list_UserName}"
+                visibleInFilterBar="true"
+            >
+                <fb:control>
+                    <MultiInput
+                        id="miUserName"
+                        tokens="{ 
+                        path: 'viewModel>/Search/UserName',
+                        sorter: { path: 'UserName'} 
+                    }"
+                        showSuggestion="false"
+                        width="300px"
+                        showValueHelp="true"
+                        valueHelpOnly="true"
+                        valueHelpRequest="onPAI"
+                        tokenUpdate="onPAI"
+                        app:fcCode="f4UserName"
+                    >
+                        <tokens>
+                            <Token
+                                key="{viewModel>UserName}"
+                                text="{viewModel>UserName}"
+                            />
+                        </tokens>
+                    </MultiInput>
+                </fb:control>
+            </fb:FilterGroupItem>
+            <!-- 도시 -->
+            <fb:FilterGroupItem
+                id="FGI_Gender"
+                name="Gender"
+                groupName="Gender"
+                label="{i18n>main_list_Gender}"
+                groupTitle="{i18n>main_list_Gender}"
+                visibleInFilterBar="true"
+            >
+                <fb:control>
+                    <MultiComboBox
+                        id="mcbGender"
+                        width="300px"
+                        app:fcCode="fcGender"
+                        selectionChange="onPAI"
+                        items="{viewModel>/MainTable/MultiComboBoxItems}"
+                    >
+                        <core:Item
+                            key="{viewModel>Gender}"
+                            text="{viewModel>Gender}"
+                        />
+                    </MultiComboBox>
+                </fb:control>
+            </fb:FilterGroupItem>
+        </fb:filterGroupItems>
+    </fb:FilterBar>
+</core:FragmentDefinition>

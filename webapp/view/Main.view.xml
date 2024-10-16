@@ -1,0 +1,72 @@
+<mvc:View
+    controllerName="readians.zfrkjs0090.controller.Main"
+    id="MainView"
+    height="100%"
+    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    xmlns:u="sap.ui.unified"
+    xmlns:table="sap.ui.table"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:vm="sap.ui.fl.variants"
+    xmlns:t="sap.ui.table"
+    xmlns:columnmenu="sap.m.table.columnmenu"
+    xmlns:sap.ui.fl="sap.ui.fl"
+    xmlns:uxap="sap.uxap"
+    xmlns:f="sap.f"
+>
+    <f:DynamicPage
+        id="MainDynamicPage"
+        class="sapUiNoContentPadding"
+        backgroundDesign="Transparent"
+        fitContent="true"
+        showFooter="true"
+        headerExpanded="true"
+        busyIndicatorDelay="0"
+        busy="{viewModel>/busy}"
+    >
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:heading>
+                    <Title text="{i18n>title}" />
+                </f:heading>
+            </f:DynamicPageTitle>
+        </f:title>
+
+        <!-- Header -->
+        <f:header>
+            <f:DynamicPageHeader pinnable="false">
+                <f:content>
+                    <core:Fragment
+                        fragmentName="readians.zfrkjs0090.view.fragments.Main.Header"
+                        type="XML"
+                    />
+                </f:content>
+            </f:DynamicPageHeader>
+        </f:header>
+
+        <!-- DynamicPage Content -->
+        <f:content>
+            <uxap:ObjectPageLayout
+                showFooter="true"
+                toggleHeaderOnTitleClick="false"
+                headerContentPinned="true"
+            >
+                <uxap:sections>
+                    <core:Fragment
+                        fragmentName="readians.zfrkjs0090.view.fragments.Main.Content"
+                        type="XML"
+                    />
+                </uxap:sections>
+
+                <uxap:footer>
+                    <core:Fragment
+                        fragmentName="readians.zfrkjs0090.view.fragments.Main.Footer"
+                        type="XML"
+                    />
+                </uxap:footer>
+            </uxap:ObjectPageLayout>
+        </f:content>
+    </f:DynamicPage>
+</mvc:View>

@@ -1,0 +1,27 @@
+<core:FragmentDefinition
+    xmlns="sap.ui.comp.valuehelpdialog"
+    xmlns:m="sap.m"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+    xmlns:core="sap.ui.core"
+>
+    <ValueHelpDialog
+        title="{i18n>City}"
+        supportMultiselect="false"
+        ok="onValueHelp"
+        cancel="onValueHelp"
+        afterClose="onValueHelp"
+        supportRanges="false"
+        key="Name"
+        descriptionKey="CountryRegion"
+        app:valueHelp="City"
+        contentWidth="60rem"
+    >
+        <filterBar>
+            <fb:FilterBar
+                advancedMode="false"
+                search="onValueHelp"
+            />
+        </filterBar>
+    </ValueHelpDialog>
+</core:FragmentDefinition>

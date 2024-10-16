@@ -1,0 +1,39 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+>
+    <Popover
+        id="PO_List"
+        showHeader="false"
+        contentWidth="400px"
+        contentHeight="300px"
+        placement="Left"
+        resizable="true"
+    >
+        <NavContainer id="navCon">
+            <Page
+                id="master"
+                title="{i18n>TripUserListTitle} {viewModel>/TripUserList/length} {i18n>detail_list_title}"
+            >
+                <List items="{viewModel>/TripUserList/Items}">
+                    <CustomListItem>
+                        <HBox
+                            width="100%"
+                            alignItems="Center"
+                            class="sapUiTinyMarginBeginEnd"
+                        >
+                            <VBox
+                                width="15rem"
+                                class="sapUiTinyMarginTopBottom"
+                            >
+                                <Title text="{viewModel>UserName}" />
+                                <Text text="{viewModel>Gender}" />
+                            </VBox>
+                        </HBox>
+                    </CustomListItem>
+                </List>
+            </Page>
+        </NavContainer>
+    </Popover>
+</core:FragmentDefinition>

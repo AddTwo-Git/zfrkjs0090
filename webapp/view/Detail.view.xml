@@ -1,0 +1,40 @@
+<mvc:View
+    controllerName="readians.zfrkjs0090.controller.Detail"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.uxap"
+    xmlns:m="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.f"
+    busyIndicatorDelay="0"
+    busyIndicatorSize="Large"
+    busy="{viewModel>/busy}"
+    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+>
+    <ObjectPageLayout
+        id="DetailObjectPageLayout"
+        showTitleInHeaderContent="true"
+        upperCaseAnchorBar="false"
+        showFooter="false"
+        height="100%"
+    >
+        <headerTitle>
+            <ObjectPageDynamicHeaderTitle>
+                <heading>
+                    <m:Title text="{i18n>detail_list_trip_title}" />
+                </heading>
+            </ObjectPageDynamicHeaderTitle>
+        </headerTitle>
+
+        <sections>
+            <core:Fragment
+                fragmentName="readians.zfrkjs0090.view.fragments.Detail.DetailSection01"
+                type="XML"
+            />
+            <core:Fragment
+                fragmentName="readians.zfrkjs0090.view.fragments.Detail.DetailSection02"
+                type="XML"
+            />
+        </sections>
+    </ObjectPageLayout>
+</mvc:View>

@@ -1,0 +1,235 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:t="sap.ui.table"
+    xmlns:core="sap.ui.core"
+    xmlns:vm="sap.ui.fl.variants"
+    xmlns:columnmenu="sap.m.table.columnmenu"
+    xmlns:fl="sap.ui.fl"
+    xmlns:plugins="sap.ui.table.plugins"
+    xmlns:p13n="sap.m.p13n"
+    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+>
+    <t:Table
+        id="T_MainTable"
+        fixedColumnCount="1"
+        rowActionCount="1"
+        rowMode="Fixed"
+        enableColumnFreeze="true"
+        showOverlay="{viewModel>/MainTable/showOverlay}"
+        sort="onPAI"
+        columnFreeze="onPAI"
+        columnResize="onPAI"
+        columnMove="onPAI"
+        app:fcCode="fcTableControl"
+        rows="{
+            path: 'viewModel>/MainTable/Items',
+            templateShareable: false
+        }"
+    >
+        <t:dependents>
+            <plugins:MultiSelectionPlugin
+                id="PI_MainSelection"
+                limit="0"
+                enableNotification="true"
+                showHeaderSelector="true"
+                selectionMode="Single"
+                selectionChange="onPAI"
+                app:fcCode="fcSelectionPlugin"
+            />
+        </t:dependents>
+        <t:rowActionTemplate>
+            <t:RowAction>
+                <t:RowActionItem
+                    type="Navigation"
+                    press=".onPAI"
+                    app:fcCode="fcNavigate"
+                />
+            </t:RowAction>
+        </t:rowActionTemplate>
+        <t:extension>
+            <OverflowToolbar>
+                <Title
+                    class="sapUiTinyMarginBeginEnd"
+                    text="{viewModel>/MainTable/length} {i18n>main_list_title}"
+                />
+                <ToolbarSpacer />
+                <Button
+                    text="{i18n>main_list_btn_Friend}"
+                    type="Ghost"
+                    press=".onPAI"
+                    app:fcCode="fcOpenFriend"
+                />
+                <Button
+                    icon="sap-icon://refresh"
+                    type="Ghost"
+                    press=".onPAI"
+                    tooltip="{i18n>main_list_btn_Refresh}"
+                    app:fcCode="fcRefresh"
+                />
+                <Button
+                    icon="sap-icon://excel-attachment"
+                    type="Transparent"
+                    press=".onPAI"
+                    app:fcCode="fcExcelExport"
+                />
+            </OverflowToolbar>
+        </t:extension>
+        <t:columns>
+            <!-- 성별 -->
+            <t:Column
+                id="Gender"
+                hAlign="Center"
+                width="100px"
+                visible="{viewModel>/ColSettings/ColInfo/Gender/visible}"
+                headerMenu="menu"
+                sortProperty="Gender"
+                filterProperty="Gender"
+            >
+                <Label text="{i18n>main_list_Gender}" />
+                <t:template>
+                    <Text text="{viewModel>Gender}" />
+                </t:template>
+            </t:Column>
+
+            <!-- 이름 -->
+            <t:Column
+                id="UserName"
+                hAlign="Begin"
+                width="160px"
+                visible="{viewModel>/ColSettings/ColInfo/UserName/visible}"
+                headerMenu="menu"
+                sortProperty="UserName"
+                filterProperty="UserName"
+            >
+                <Label text="{i18n>main_list_UserName}" />
+                <t:template>
+                    <Text
+                        text="{
+                            parts: [
+                                'viewModel>FirstName',
+                                'viewModel>MiddleName',
+                                'viewModel>LastName'
+                            ]
+                        }"
+                        tooltip="{
+                            parts: [
+                                'viewModel>LastName',
+                                'viewModel>MiddleName',
+                                'viewModel>FirstName'
+                            ]
+                        }"
+                        maxLines="1"
+                    />
+                </t:template>
+            </t:Column>
+
+            <!-- 이메일 1 -->
+            <t:Column
+                id="Emails_1"
+                hAlign="Center"
+                width="160px"
+                visible="{viewModel>/ColSettings/ColInfo/Emails/visible}"
+                headerMenu="menu"
+                sortProperty="Emails"
+                filterProperty="Emails"
+            >
+                <Label text="{i18n>main_list_Emails1}" />
+                <t:template>
+                    <Text
+                        text="{viewModel>Emails/0}"
+                        tooltip="{viewModel>Emails/0}"
+                        maxLines="1"
+                    />
+                </t:template>
+            </t:Column>
+
+            <!-- 이메일 1 -->
+            <t:Column
+                id="Emails_2"
+                hAlign="Center"
+                width="160px"
+                visible="{viewModel>/ColSettings/ColInfo/Emails/visible}"
+                headerMenu="menu"
+                sortProperty="Emails"
+                filterProperty="Emails"
+            >
+                <Label text="{i18n>main_list_Emails2}" />
+                <t:template>
+                    <Text
+                        text="{viewModel>Emails/1}"
+                        tooltip="{viewModel>Emails/1}"
+                        maxLines="1"
+                    />
+                </t:template>
+            </t:Column>
+
+            <!-- 주소 -->
+            <t:Column
+                id="Address"
+                hAlign="Center"
+                width="160px"
+                visible="{viewModel>/ColSettings/ColInfo/Address/visible}"
+                headerMenu="menu"
+                sortProperty="Address"
+                filterProperty="Address"
+            >
+                <Label text="{i18n>main_list_Address}" />
+                <t:template>
+                    <Text
+                        text="{viewModel>AddressInfo/0/Address}"
+                        tooltip="{viewModel>AddressInfo/0/Address}"
+                        maxLines="1"
+                    />
+                </t:template>
+            </t:Column>
+
+            <!-- 국가 -->
+            <t:Column
+                id="CityCountryRegion"
+                hAlign="Center"
+                width="130px"
+                visible="{viewModel>/ColSettings/ColInfo/CityCountryRegion/visible}"
+                headerMenu="menu"
+                sortProperty="CityCountryRegion"
+                filterProperty="CityCountryRegion"
+            >
+                <Label text="{i18n>main_list_CityCountryRegion}" />
+                <t:template>
+                    <Text text="{viewModel>AddressInfo/0/City/CountryRegion}" />
+                </t:template>
+            </t:Column>
+
+            <!-- 도시이름 -->
+            <t:Column
+                id="CityName"
+                hAlign="Center"
+                width="130px"
+                visible="{viewModel>/ColSettings/ColInfo/CityName/visible}"
+                headerMenu="menu"
+                sortProperty="CityName"
+                filterProperty="CityName"
+            >
+                <Label text="{i18n>main_list_CityName}" />
+                <t:template>
+                    <Text text="{viewModel>AddressInfo/0/City/Name}" />
+                </t:template>
+            </t:Column>
+
+            <!-- 지역 Region -->
+            <t:Column
+                id="Region"
+                hAlign="Center"
+                width="60px"
+                visible="{viewModel>/ColSettings/ColInfo/Region/visible}"
+                headerMenu="menu"
+                sortProperty="Region"
+                filterProperty="Region"
+            >
+                <Label text="{i18n>main_list_Region}" />
+                <t:template>
+                    <Text text="{viewModel>AddressInfo/0/City/Region}" />
+                </t:template>
+            </t:Column>
+        </t:columns>
+    </t:Table>
+</core:FragmentDefinition>

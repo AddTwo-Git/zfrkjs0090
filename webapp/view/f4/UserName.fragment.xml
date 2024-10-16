@@ -1,0 +1,26 @@
+<core:FragmentDefinition
+    xmlns="sap.ui.comp.valuehelpdialog"
+    xmlns:m="sap.m"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+    xmlns:core="sap.ui.core"
+>
+    <ValueHelpDialog
+        title="{i18n>UserName}"
+        supportMultiselect="true"
+        ok="onValueHelp"
+        cancel="onValueHelp"
+        afterClose="onValueHelp"
+        supportRanges="false"
+        key="UserName" 
+        app:valueHelp="UserName"
+        contentWidth="620px"
+    >
+        <filterBar>
+            <fb:FilterBar
+                advancedMode="false"
+                search="onValueHelp"
+            />
+        </filterBar>
+    </ValueHelpDialog>
+</core:FragmentDefinition>
