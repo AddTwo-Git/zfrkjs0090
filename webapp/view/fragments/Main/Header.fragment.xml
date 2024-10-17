@@ -47,7 +47,7 @@
                     </MultiInput>
                 </fb:control>
             </fb:FilterGroupItem>
-            <!-- 도시 -->
+            <!-- 성별 -->
             <fb:FilterGroupItem
                 id="FGI_Gender"
                 name="Gender"

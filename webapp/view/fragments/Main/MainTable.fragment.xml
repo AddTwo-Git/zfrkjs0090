@@ -102,14 +102,19 @@
             >
                 <Label text="{i18n>main_list_Gender}" />
                 <t:template>
-                    <Input
+                    <ComboBox
                         textAlign="Center"
-                        value="{viewModel>Gender}"
-                        change="onPAI"
                         app:fcCode="fcTableGender"
+                        selectionChange="onPAI"
+                        value="{viewModel>Gender}"
                         editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['FirstName']}"
-                    />
-                    <!-- <Text text="{viewModel>Gender}" /> -->
+                        items="{viewModel>/MainTable/MultiComboBoxItems}"
+                    >
+                        <core:Item
+                            key="{viewModel>Gender}"
+                            text="{viewModel>Gender}"
+                        />
+                    </ComboBox>
                 </t:template>
             </t:Column>
 
@@ -297,7 +302,7 @@
                         value="{viewModel>AddressInfo/0/Address}"
                         change="onPAI"
                         app:fcCode="fcTableAddressInfo"
-                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['AddressInfo']}"
+                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['Address']}"
                     />
                     <!-- <Text
                         text="{viewModel>AddressInfo/0/Address}"
@@ -324,7 +329,7 @@
                         value="{viewModel>AddressInfo/0/City/CountryRegion}"
                         change="onPAI"
                         app:fcCode="fcTableAddressInfo"
-                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['AddressInfo']}"
+                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['Country']}"
                     />
                     <!-- <Text text="{viewModel>AddressInfo/0/City/CountryRegion}" /> -->
                 </t:template>
@@ -347,7 +352,7 @@
                         value="{viewModel>AddressInfo/0/City/Name}"
                         change="onPAI"
                         app:fcCode="fcTableAddressInfo"
-                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['AddressInfo']}"
+                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['City']}"
                     />
                     <!-- <Text text="{viewModel>AddressInfo/0/City/Name}" /> -->
                 </t:template>
@@ -365,14 +370,14 @@
             >
                 <Label text="{i18n>main_list_Region}" />
                 <t:template>
-                    <Input
+                    <!-- <Input
                         textAlign="Begin"
                         value="{viewModel>AddressInfo/0/City/Region}"
                         change="onPAI"
                         app:fcCode="fcTableAddressInfo"
-                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['AddressInfo']}"
-                    />
-                    <!-- <Text text="{viewModel>AddressInfo/0/City/Region}" /> -->
+                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['Region']}"
+                    /> -->
+                    <Text text="{viewModel>AddressInfo/0/City/Region}" />
                 </t:template>
             </t:Column>
         </t:columns>

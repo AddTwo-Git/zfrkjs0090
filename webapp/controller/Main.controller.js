@@ -622,7 +622,6 @@ sap.ui.define(
         return aTableRowData.some((row) => row.chngFlag === true);
       },
 
-
       /*******************************************************************
        * Download Spread Sheet
        *******************************************************************/
@@ -636,6 +635,22 @@ sap.ui.define(
           return;
         }
 
+        const aNewDataSource = aMainTab.map((obj) => {
+          const address = obj.AddressInfo[0] || {};
+          return {
+            ...obj,
+            ...{
+              Emails_1: obj.Emails[0] || "",
+              Emails_2: obj.Emails[1] || "",
+              Address: address.Address || "",
+              CityCountryRegion:
+                (address.City && address.City.CountryRegion) || "",
+              CityName: (address.City && address.City.Name) || "",
+              Region: (address.City && address.City.Region) || "",
+            },
+          };
+        });
+
         const aCols = this._createColumnConfigCM();
         const sToday = dayjs().format("YYYY.MM.DD HH.mm.ss");
         const sFileName = this.getI18nText("appTitle") + "_" + sToday + ".xlsx";
@@ -644,7 +659,7 @@ sap.ui.define(
             columns: aCols,
             hierarchyLevel: "Level",
           },
-          dataSource: oRowBinding,
+          dataSource: aNewDataSource,
           fileName: sFileName,
           worker: false,
           showProgress: true,
@@ -730,7 +745,7 @@ sap.ui.define(
                 aUniGenders.push({ Gender: oData.Gender });
               }
               return aUniGenders;
-            }, []); 
+            }, []);
 
             this.viewModel.setMainTableMultiComboBoxItems(aNewResult);
           })
