@@ -49,16 +49,5 @@ sap.ui.define(["sap/ui/core/format/DateFormat"], function (DateFormat) {
         return formattedDate;
       }
     },
-
-    formatPersonGender: function (genderEnum) {
-      switch (genderEnum) {
-        case "Male":
-          return '0';
-        case "Female":
-          return '1';
-        default:
-          return '2';
-      }
-    },
   };
 });
