@@ -18,7 +18,7 @@ sap.ui.define(
         showOverlay: false,
         Edited: false,
         IsSearched: false,
-        MultiComboBoxItems: [],
+        HeaderGender: [],
       },
 
       DetailTable: {
@@ -29,8 +29,9 @@ sap.ui.define(
       Search: {
         UserName: [],
         Gender: [],
-        City: [],
+        TableCountry: [],
         Country: [],
+        TableCity: [],
         Address: [],
         Region: [],
       },
@@ -81,7 +82,7 @@ sap.ui.define(
             Address: true,
             Country: true,
             City: true,
-            Region : false,
+            Region: false,
           },
           E: {
             Gender: false,
@@ -93,7 +94,7 @@ sap.ui.define(
             Address: true,
             Country: true,
             City: true,
-            Region : false,
+            Region: false,
           },
           C: {
             Gender: false,
@@ -105,7 +106,7 @@ sap.ui.define(
             Address: false,
             Country: false,
             City: false,
-            Region : false,
+            Region: false,
           },
         },
       },
@@ -340,8 +341,8 @@ sap.ui.define(
       /*******************************************************************
        * MainTable
        *******************************************************************/
-      setMainTableMultiComboBoxItems: function (aItems) {
-        this.model.setProperty("/MainTable/MultiComboBoxItems", aItems);
+      setMainTableHeaderGender: function (aItems) {
+        this.model.setProperty("/MainTable/HeaderGender", aItems);
       },
 
       setMainTableItems: function (aItem) {
@@ -381,6 +382,33 @@ sap.ui.define(
         this.model.setProperty("/MainTable/IsSearched", bBool);
       },
 
+      /*******************************************************************
+       * DetailTable
+       *******************************************************************/
+      setDetailTableItems: function (aItem) {
+        this.model.setProperty("/DetailTable/Items", aItem);
+        this.setDetailTableItemsLength(aItem);
+      },
+
+      getDetailTableItems: function () {
+        return this.model.getProperty("/DetailTable/Items");
+      },
+
+      setDetailTableItemsLength: function (aItem) {
+        if (_.isEmpty(aItem)) {
+          this.model.setProperty("/DetailTable/length", 0);
+        } else {
+          this.model.setProperty("/DetailTable/length", aItem.length);
+        }
+      },
+
+      setDetailTableChngFlagbyPath(vPath, bool) {
+        this.model.setProperty(`${vPath}/chngFlag`, bool);
+      },
+
+      /******************************************************************
+       * Edit Line
+       ******************************************************************/
       addInitLine() {
         const aMainTab = _.cloneDeep(this.getMainTableItems());
         const aNewTab = _.concat(
@@ -420,28 +448,126 @@ sap.ui.define(
         this.setMainTableItemsLength(aNewTab);
       },
 
-      /*******************************************************************
-       * DetailTable
-       *******************************************************************/
-      setDetailTableItems: function (aItem) {
-        this.model.setProperty("/DetailTable/Items", aItem);
-        this.setDetailTableItemsLength(aItem);
+      //원본 데이터의 복사본 저장
+      setCompTrgt() {
+        const aNewLines = _.map(
+          _.cloneDeep(this.getMainTableItems()),
+          (oLine) => {
+            oLine.CompTrgt = _.cloneDeep(oLine);
+            return oLine;
+          }
+        );
+        this.model.setProperty("/MainTable/Items", aNewLines);
       },
 
-      getDetailTableItems: function () {
-        return this.model.getProperty("/DetailTable/Items");
+      // Change Flag 처리
+      checkMainTableLineEdited(vPath) {
+        const oLineData = this.model.getProperty(vPath),
+          aCompKeys = [
+            "Gender",
+            "FirstName",
+            "MiddleName",
+            "LastName",
+            "Email1",
+            "Email2",
+            "Address",
+            "CityCountryRegion",
+            "CityName",
+            "Region",
+          ];
+        let bEdited = false;
+        _.forEach(aCompKeys, (key) => {
+          if (oLineData[key] != oLineData.CompTrgt[key]) {
+            bEdited = true;
+            return false;
+          }
+        });
+        this.setMainTableChngFlagbyPath(vPath, bEdited);
       },
 
-      setDetailTableItemsLength: function (aItem) {
-        if (_.isEmpty(aItem)) {
-          this.model.setProperty("/DetailTable/length", 0);
-        } else {
-          this.model.setProperty("/DetailTable/length", aItem.length);
-        }
-      },
-
-      setDetailTableChngFlagbyPath(vPath, bool) {
+      setMainTableChngFlagbyPath(vPath, bool) {
         this.model.setProperty(`${vPath}/chngFlag`, bool);
+      },
+
+      getMainTableChngFlagItems() {
+        return _.filter(this.getMainTableItems(), (oData) => {
+          return oData.chngFlag;
+        });
+      },
+
+      // getTableGender: function(sPath) {
+      //   return this.model.getProperty(`${sPath}/Gender`);
+      // },
+
+      setTableGender(sPath, key) {
+        // const Gender = this.getTableGender(sPath);
+        this.model.setProperty(`${sPath}/Gender`, key);
+      },
+
+      setTableUserName(sPath, key) {
+        this.model.setProperty(`${sPath}/UserName`, key);
+      },
+
+      setTableFirstName(sPath, key) {
+        this.model.setProperty(`${sPath}/FirstName`, key);
+      },
+
+      getTableFirstName(sPath) {
+        return this.model.getProperty(`${sPath}/FirstName`);
+      },
+
+      setTableMiddleName(sPath, key) {
+        this.model.setProperty(`${sPath}/MiddleName`, key);
+      },
+
+      getTableMiddleName(sPath) {
+        return this.model.getProperty(`${sPath}/MiddleName`);
+      },
+
+      setTableLastName(sPath, key) {
+        this.model.setProperty(`${sPath}/LastName`, key);
+      },
+
+      getTableLastName(sPath) {
+        return this.model.getProperty(`${sPath}/LastName`);
+      },
+
+      setTableEmail1(sPath, key) {
+        this.model.setProperty(`${sPath}/Emails/0`, key);
+      },
+
+      setTableEmail2(sPath, key) {
+        this.model.setProperty(`${sPath}/Emails/1`, key);
+      },
+
+      setTableCountry(sPath, key) {
+        let aAddressInfo = this.model.getProperty(`${sPath}/AddressInfo`) || [];
+
+        if (aAddressInfo.length === 0) {
+          aAddressInfo.push({ City: { CountryRegion: "" } });
+        }
+
+        aAddressInfo[0].City.CountryRegion = key;
+
+        this.model.setProperty(`${sPath}/AddressInfo`, aAddressInfo);
+      },
+
+      getTableCountry(sPath) {
+        return this.model.getProperty(
+          `${sPath}/AddressInfo/0/City/CountryRegion`
+        );
+      },
+
+      setTableCity(sPath, key) {
+        this.model.setProperty(`${sPath}/CityName`, key);
+      },
+
+      setTableAddress(sPath, key) {
+        this.model.setProperty(`${sPath}/Address`, key);
+      },
+
+      setTableRegion(sPath, key) {
+        this.model.setProperty(`${sPath}/Region`, key);
       },
 
       /******************************************************************
@@ -467,12 +593,20 @@ sap.ui.define(
         this.model.setProperty("/Search/Gender", selUsers);
       },
 
-      getFilterCity() {
-        return this.model.getProperty("/Search/City");
+      getFilterTableCountry() {
+        return this.model.getProperty("/Search/TableCountry");
       },
 
-      setFilterCity(selUsers) {
-        this.model.setProperty("/Search/City", selUsers);
+      setFilterTableCountry(selUsers) {
+        this.model.setProperty("/Search/TableCountry", selUsers);
+      },
+
+      getFilterTableCity() {
+        return this.model.getProperty("/Search/TableCity");
+      },
+
+      setFilterTableCity(selUsers) {
+        this.model.setProperty("/Search/TableCity", selUsers);
       },
 
       getFilterCountry() {

@@ -46,7 +46,7 @@ sap.ui.define(
         this.dh = this.getOwnerComponent().dh;
         this.viewModel = new ViewModel(this.dh.getI18n().getResourceBundle());
         this.setModel(this.viewModel.getModel(), "viewModel");
-        this._fcMultiComboBoxItems();
+        this._fcHeaderGender();
         this.initMessageModel("message");
 
         this.dh.router
@@ -73,6 +73,32 @@ sap.ui.define(
               break;
             case "fcNavigate":
               this._fcNavigate(event);
+              break;
+
+            // Edit Table
+            case "fcTableGender":
+              this._fcTableGender(event);
+              break;
+            case "fcTableFirstName":
+              this._fcTableFirstName(event);
+              break;
+            case "fcTableMiddleName":
+              this._fcTableMiddleName(event);
+              break;
+            case "fcTableLastName":
+              this._fcTableLastName(event);
+              break;
+            case "fcTableEmail1":
+              this._fcTableEmail1(event);
+              break;
+            case "fcTableEmail2":
+              this._fcTableEmail2(event);
+              break;
+            case "fcTableCountry":
+              this._fcTableCountry(event);
+              break;
+            case "fcTableCity":
+              this._fcTableCity(event);
               break;
 
             // Filter Bar / Value Help control
@@ -245,6 +271,20 @@ sap.ui.define(
             this.viewModel.setIsSearched(true);
             this.viewModel.setMainTableItems(aNewResult);
 
+            this.viewModel.setCompTrgt();
+
+            const aCountryInfo = Array.from(
+              new Set(
+                aNewResult
+                  .filter(
+                    (item) => item.AddressInfo && item.AddressInfo.length > 0
+                  )
+                  .map((item) => item.AddressInfo[0].City.CountryRegion)
+                  .filter((country) => country)
+              )
+            ).map((country) => ({ CountryRegion: country }));
+            this.viewModel.setFilterTableCountry(aCountryInfo);
+
             this.getView()
               .byId(this.ControlID.Table.T_MainTable)
               .getBinding("rows")
@@ -301,6 +341,7 @@ sap.ui.define(
               : true
           ),
           (obj) => {
+            // Field 값 유무에 따라 State 결정
             const aFieldsToCheck = [
               "Gender",
               "UserName",
@@ -622,6 +663,158 @@ sap.ui.define(
         return aTableRowData.some((row) => row.chngFlag === true);
       },
 
+      _fcTableGender: function (event) {
+        const sPath = event
+          .getSource()
+          .getBindingContext("viewModel")
+          .getPath();
+        // this.viewModel.setTableGender(sPath);
+        this._fcCheckLineEdited(sPath);
+        this.viewModel.setMainTableEdited(true);
+      },
+
+      _fcTableUserName: function (sPath) {
+        const vFirstName = this.viewModel.getTableFirstName(sPath) || "",
+          vMiddleName = this.viewModel.getTableFirstName(sPath) || "",
+          vLastName = this.viewModel.getTableFirstName(sPath) || "";
+
+        const vUserName = vFirstName + vMiddleName + vLastName;
+
+        this.viewModel.setTableUserName(sPath, vUserName);
+      },
+
+      _fcTableFirstName: function (event) {
+        const sPath = event
+          .getSource()
+          .getBindingContext("viewModel")
+          .getPath();
+        // this.viewModel.setTableFirstName(sPath);
+
+        this._fcTableUserName(sPath);
+        this._fcCheckLineEdited(sPath);
+        this.viewModel.setMainTableEdited(true);
+      },
+
+      _fcTableMiddleName: function (event) {
+        const sPath = event
+          .getSource()
+          .getBindingContext("viewModel")
+          .getPath();
+        // this.viewModel.setTableMiddleName(sPath);
+
+        this._fcTableUserName(sPath);
+        this._fcCheckLineEdited(sPath);
+        this.viewModel.setMainTableEdited(true);
+      },
+
+      _fcTableLastName: function (event) {
+        const sPath = event
+          .getSource()
+          .getBindingContext("viewModel")
+          .getPath();
+        // this.viewModel.setTableLastName(sPath);
+
+        this._fcTableUserName(sPath);
+        this._fcCheckLineEdited(sPath);
+        this.viewModel.setMainTableEdited(true);
+      },
+
+      _fcTableEmail1: function (event) {
+        const sPath = event
+          .getSource()
+          .getBindingContext("viewModel")
+          .getPath();
+        // this.viewModel.setTableEmail1(sPath);
+        this._fcCheckLineEdited(sPath);
+        this.viewModel.setMainTableEdited(true);
+      },
+
+      _fcTableEmail2: function (event) {
+        const sPath = event
+          .getSource()
+          .getBindingContext("viewModel")
+          .getPath();
+        // this.viewModel.setTableEmail2(sPath);
+        this._fcCheckLineEdited(sPath);
+        this.viewModel.setMainTableEdited(true);
+      },
+
+      _fcTableCountry: function (event) {
+        const sPath = event
+          .getSource()
+          .getBindingContext("viewModel")
+          .getPath();
+
+        const oSelectedItem = event.getParameter("selectedItem");
+        const aSelectedKeys = oSelectedItem.getKey();
+
+        if (!aSelectedKeys) {
+          this.showError(this.getI18nText("ErrMsg003"));
+          return;
+        }
+
+        this.viewModel.setTableCountry(sPath, aSelectedKeys);
+        this._fcCheckLineEdited(sPath);
+        this.viewModel.setMainTableEdited(true);
+      },
+
+      _fcTableCity: function (event) {
+        const sPath = event
+          .getSource()
+          .getBindingContext("viewModel")
+          .getPath();
+
+        const vCountry = this.viewModel.getTableCountry(sPath);
+
+        let aOmit = [];
+        if (!vCountry || vCountry.length == 0) aOmit.push("국가");
+
+        if (aOmit.length > 0) {
+          this.showError(this.getI18nText("ErrMsg013", aOmit));
+          return;
+        }
+
+        const aMainTab = this.viewModel.getMainTableItems();
+
+        const allCities = aMainTab.flatMap((item) =>
+          item.AddressInfo && item.AddressInfo.length > 0
+            ? item.AddressInfo.filter(
+                (info) => info.City && info.Address && info.City.Region
+              ).map((info) => ({
+                Name: info.City.Name,
+                Address: info.Address,
+                Region: info.City.Region,
+              }))
+            : []
+        );
+
+        // 중복 제거
+        const aUniqCityInfo = _.uniqBy(allCities, "Name");
+
+        const callback = function (tokens) {
+          const key = tokens[0].getKey();
+          const line = tokens[0].data().row;
+          this.viewModel.setTableCity(sPath, key);
+          this.viewModel.setTableAddress(sPaths, line.Address);
+          this.viewModel.setTableRegion(sPaths, line.Address);
+          this._fcCheckLineEdited(sPath);
+          this.viewModel.setMainTableEdited(true);
+        }.bind(this);
+        this.callValueHelp(
+          "TabCity",
+          this.dh.odata.getModel(""),
+          callback,
+          {},
+          ["Name"],
+          false,
+          []
+        );
+
+        this.viewModel.setTableCity(sPath);
+        this._fcCheckLineEdited(sPath);
+        this.viewModel.setMainTableEdited(true);
+      },
+
       /*******************************************************************
        * Download Spread Sheet
        *******************************************************************/
@@ -640,8 +833,8 @@ sap.ui.define(
           return {
             ...obj,
             ...{
-              Emails_1: obj.Emails[0] || "",
-              Emails_2: obj.Emails[1] || "",
+              Emails1: obj.Emails[0] || "",
+              Emails2: obj.Emails[1] || "",
               Address: address.Address || "",
               CityCountryRegion:
                 (address.City && address.City.CountryRegion) || "",
@@ -730,7 +923,7 @@ sap.ui.define(
       /*******************************************************************
        * Call Action
        *******************************************************************/
-      _fcMultiComboBoxItems: function () {
+      _fcHeaderGender: function () {
         this.dh.odata
           ._ReadMainTableView()
           .then((aResult) => {
@@ -747,7 +940,7 @@ sap.ui.define(
               return aUniGenders;
             }, []);
 
-            this.viewModel.setMainTableMultiComboBoxItems(aNewResult);
+            this.viewModel.setMainTableHeaderGender(aNewResult);
           })
           .catch((error) => {
             this._handleError(error);

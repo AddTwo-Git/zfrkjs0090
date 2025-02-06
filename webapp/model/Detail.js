@@ -25,6 +25,15 @@ sap.ui.define(
         Items: [],
         DetailItems: [],
       },
+
+      ShareTable: {
+        length: 0,
+        Items: [],
+      },
+
+      Search: {
+        UserName: [],
+      },
     };
 
     const model = ViweModelBase.extend(moduleName, {
@@ -140,6 +149,41 @@ sap.ui.define(
 
       setTripTagListDetailItems: function (aTab) {
         this.model.setProperty("/TagList/DetailItems", aTab);
+      },
+
+      /*******************************************************************
+       * Share Trip List Popup
+       *******************************************************************/
+      setShareTableItems: function (aTab) {
+        this.model.setProperty("/ShareTable/Items", aTab);
+        this.setShareTableItemsLength(aTab);
+      },
+
+      getShareTableItems: function () {
+        return this.model.getProperty("/ShareTable/Items");
+      },
+
+      setShareTableItemsLength: function (aTab) {
+        if (_.isEmpty(aTab)) {
+          this.model.setProperty("/ShareTable/length", 0);
+        } else {
+          this.model.setProperty("/ShareTable/length", aTab.length);
+        }
+      },
+
+      /******************************************************************
+       * FilterBar
+       ******************************************************************/
+      getFilters() {
+        return this.model.getProperty("/Search");
+      },
+
+      getFilterUserName() {
+        return this.model.getProperty("/Search/UserName");
+      },
+
+      setFilterUserName(aToken) {
+        this.model.setProperty("/Search/UserName", aToken);
       },
     });
 

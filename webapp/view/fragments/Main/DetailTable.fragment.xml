@@ -189,25 +189,6 @@
                 </t:template>
             </t:Column>
 
-            <!-- 주소 -->
-            <t:Column
-                hAlign="Begin"
-                width="160px"
-                visible="{viewModel>/ColSettings/ColInfo/Address/visible}"
-                headerMenu="menu"
-                sortProperty="Address"
-                filterProperty="Address"
-            >
-                <Label text="{i18n>detail_list_Address}" />
-                <t:template>
-                    <Text
-                        text="{viewModel>AddressInfo/0/Address}"
-                        tooltip="{viewModel>AddressInfo/0/Address}"
-                        maxLines="1"
-                    />
-                </t:template>
-            </t:Column>
-
             <!-- 국가 -->
             <t:Column
                 hAlign="Center"
@@ -235,6 +216,25 @@
                 <Label text="{i18n>detail_list_CityName}" />
                 <t:template>
                     <Text text="{viewModel>AddressInfo/0/City/Name}" />
+                </t:template>
+            </t:Column>
+
+            <!-- 주소 -->
+            <t:Column
+                hAlign="Begin"
+                width="160px"
+                visible="{viewModel>/ColSettings/ColInfo/Address/visible}"
+                headerMenu="menu"
+                sortProperty="Address"
+                filterProperty="Address"
+            >
+                <Label text="{i18n>detail_list_Address}" />
+                <t:template>
+                    <Text
+                        text="{viewModel>AddressInfo/0/Address}"
+                        tooltip="{viewModel>AddressInfo/0/Address}"
+                        maxLines="1"
+                    />
                 </t:template>
             </t:Column>
 

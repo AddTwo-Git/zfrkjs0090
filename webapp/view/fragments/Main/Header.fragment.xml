@@ -62,7 +62,7 @@
                         width="300px"
                         app:fcCode="fcGender"
                         selectionChange="onPAI"
-                        items="{viewModel>/MainTable/MultiComboBoxItems}"
+                        items="{viewModel>/MainTable/HeaderGender}"
                     >
                         <core:Item
                             key="{viewModel>Gender}"

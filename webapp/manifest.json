@@ -21,7 +21,7 @@
     },
     "dataSources": {
       "default": {
-        "uri": "https://services.odata.org/TripPinRESTierService/(S(id))/",
+        "uri": "https://services.odata.org/TripPinRESTierService/(S(av35taaskwr0pvue22fyevq4))/",
         "type": "OData",
         "settings": {
           "odataVersion": "4.0",

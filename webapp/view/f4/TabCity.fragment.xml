@@ -6,16 +6,16 @@
     xmlns:core="sap.ui.core"
 >
     <ValueHelpDialog
-        title="{i18n>City}"
+        title="{i18n>TabCity}"
         supportMultiselect="false"
         ok="onValueHelp"
         cancel="onValueHelp"
         afterClose="onValueHelp"
         supportRanges="false"
         key="Name"
-        descriptionKey="CountryRegion"
-        app:valueHelp="City"
-        contentWidth="60rem"
+        descriptionKey="Address"
+        app:valueHelp="TabCity"
+        contentWidth="500px"
     >
         <filterBar>
             <fb:FilterBar

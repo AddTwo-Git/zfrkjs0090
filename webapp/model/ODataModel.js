@@ -5,8 +5,7 @@ sap.ui.define(
 
     const nameSpace = "readians.zfrkjs0090";
     const moduleName = nameSpace + ".ODataModel";
-    // const cPrefix =
-    //   "/ZCO_P_SAVEDEPRE/com.sap.gateway.srvd_a2x.zco_p_savedepre_api.v0001";
+    const cPrefix = "/Trippin";
 
     const odataModel = ODataModelBase.extend(moduleName, {
       /**
@@ -23,9 +22,6 @@ sap.ui.define(
         return vReturn;
       },
 
-      /*******************************************************************
-       * Main View
-       *******************************************************************/
       _ReadMainTableView: function (oFilter) {
         const oModel = this.getModel("");
         const oListBinding = oModel.bindList("/People", null, null, oFilter, {
@@ -53,9 +49,6 @@ sap.ui.define(
         return oContext.requestObject(0, 500);
       },
 
-      /*******************************************************************
-       * Detail View
-       *******************************************************************/
       _ReadPeopleTripDetailDataView: function (vKey) {
         const oModel = this.getModel("");
         let oContext = oModel.bindContext(`/People('${vKey}')`);
@@ -64,7 +57,7 @@ sap.ui.define(
       },
 
       _ReadPeopleTripDetailTableView: function (vKey) {
-        const oModel = this.getModel(""); 
+        const oModel = this.getModel("");
 
         const oContext = oModel.bindContext(`/People('${vKey}')?$expand=Trips`);
 
@@ -92,10 +85,30 @@ sap.ui.define(
         return oListBinding.requestContexts(0, 500);
       },
 
-      // _ReadTripDetailList: function (vKey) {
-      //   const oModel =this.getModel("");
-      //   let oContext = oModel.bindContext(`/Trip()`)
-      // },
+      _ReadPeopleTripPlanItemList: function (oParameter) {
+        const oModel = this.getModel("");
+
+        const sPersonInstancePath = `/People('${oParameter.PeopleInstance}')`,
+          sTripIdPath = `/Trips(${oParameter.TripId})`,
+          sPath = sPersonInstancePath + sTripIdPath + `/PlanItems`;
+
+        const oContext = oModel.bindContext(sPath);
+
+        return oContext.requestObject(0, 500);
+      },
+
+      CallShareTrip: function (oParameter) {
+        const oModel = this.getModel("");
+
+        const sPersonInstancePath = `/People('${oParameter.PeopleInstance}')`,
+          sActionPath = sPersonInstancePath + `${cPrefix}.ShareTrip(...)`;
+
+        let oActionContext = oModel.bindContext(sActionPath);
+
+        oActionContext.setParameter("userName", oParameter.UserName);
+        oActionContext.setParameter("tripId", oParameter.TripId);
+        return oActionContext;
+      },
     });
 
     return odataModel;

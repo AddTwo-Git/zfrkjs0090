@@ -77,21 +77,6 @@ sap.ui.define(
 
       _getColumnAction: function (valueHelpName) {
         switch (valueHelpName) {
-          case "City":
-            return {
-              cols: [
-                {
-                  label: this.i18n.getText("City"),
-                  template: "AddressInfo/0/City/Name",
-                  width: "80px",
-                },
-                {
-                  label: this.i18n.getText("CountryRegion"),
-                  template: "AddressInfo/0/City/CountryRegion",
-                },
-              ],
-            };
-
           case "UserName":
             return {
               cols: [
@@ -111,7 +96,7 @@ sap.ui.define(
                   width: "150px",
                 },
               ],
-            };
+            }; 
 
           default:
             throw Error(
@@ -122,9 +107,9 @@ sap.ui.define(
 
       _getRangeFields: function (valueHelpName) {
         switch (valueHelpName) {
-          case "City":
-            return [];
           case "UserName":
+            return [];
+          case "TabCity":
             return [];
           default:
             throw Error(
@@ -135,9 +120,9 @@ sap.ui.define(
 
       _getDataPath: function (valueHelpName) {
         switch (valueHelpName) {
-          case "City":
-            return "/People";
           case "UserName":
+            return "/People";
+          case "TabCity":
             return "/People";
           default:
             throw Error(

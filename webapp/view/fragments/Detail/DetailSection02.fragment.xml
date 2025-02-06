@@ -16,7 +16,7 @@
             >
                 <t:Table
                     id="T_TripTable"
-                    selectionMode="None"
+                    selectionMode="Single"
                     rowMode="Auto"
                     rows="{
                         path: 'viewModel>/DetailTable/Items',
@@ -30,6 +30,12 @@
                                 text="{viewModel>/DetailTable/length} {i18n>detail_list_title}"
                             />
                             <ToolbarSpacer />
+                            <Button
+                                text="{i18n>detail_list_btn_ShareTrip}"
+                                type="Ghost"
+                                press=".onPAI"
+                                app:fcCode="fcShareTrip"
+                            />
                         </OverflowToolbar>
                     </t:extension>
                     <t:rowSettingsTemplate>

@@ -37,6 +37,11 @@
                 app:fcCode="fcSelectionPlugin"
             />
         </t:dependents>
+        <t:rowSettingsTemplate>
+            <t:RowSettings
+                highlight="{= %{viewModel>Chkdel}? 'Error' : %{viewModel>chngFlag}? 'Information' : 'None'}"
+            />
+        </t:rowSettingsTemplate>
         <t:rowActionTemplate>
             <t:RowAction>
                 <t:RowActionItem
@@ -94,7 +99,7 @@
             <t:Column
                 id="Gender"
                 hAlign="Center"
-                width="100px"
+                width="130px"
                 visible="{viewModel>/ColSettings/ColInfo/Gender/visible}"
                 headerMenu="menu"
                 sortProperty="Gender"
@@ -107,8 +112,8 @@
                         app:fcCode="fcTableGender"
                         selectionChange="onPAI"
                         value="{viewModel>Gender}"
-                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['FirstName']}"
-                        items="{viewModel>/MainTable/MultiComboBoxItems}"
+                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['Gender']}"
+                        items="{viewModel>/MainTable/HeaderGender}"
                     >
                         <core:Item
                             key="{viewModel>Gender}"
@@ -233,7 +238,7 @@
 
             <!-- 이메일 1 -->
             <t:Column
-                id="Emails_1"
+                id="Emails1"
                 hAlign="Begin"
                 width="160px"
                 visible="{viewModel>/ColSettings/ColInfo/Emails/visible}"
@@ -247,7 +252,7 @@
                         textAlign="Begin"
                         value="{viewModel>Emails/0}"
                         change="onPAI"
-                        app:fcCode="fcTableEmails"
+                        app:fcCode="fcTableEmail1"
                         editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['Emails']}"
                     />
                     <!-- <Text
@@ -260,7 +265,7 @@
 
             <!-- 이메일 1 -->
             <t:Column
-                id="Emails_2"
+                id="Emails2"
                 hAlign="Begin"
                 width="160px"
                 visible="{viewModel>/ColSettings/ColInfo/Emails/visible}"
@@ -274,7 +279,7 @@
                         textAlign="Begin"
                         value="{viewModel>Emails/1}"
                         change="onPAI"
-                        app:fcCode="fcTableEmails"
+                        app:fcCode="fcTableEmail2"
                         editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['Emails']}"
                     />
                     <!-- <Text
@@ -285,38 +290,11 @@
                 </t:template>
             </t:Column>
 
-            <!-- 주소 -->
-            <t:Column
-                id="Address"
-                hAlign="Begin"
-                width="160px"
-                visible="{viewModel>/ColSettings/ColInfo/Address/visible}"
-                headerMenu="menu"
-                sortProperty="Address"
-                filterProperty="Address"
-            >
-                <Label text="{i18n>main_list_Address}" />
-                <t:template>
-                    <Input
-                        textAlign="Begin"
-                        value="{viewModel>AddressInfo/0/Address}"
-                        change="onPAI"
-                        app:fcCode="fcTableAddressInfo"
-                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['Address']}"
-                    />
-                    <!-- <Text
-                        text="{viewModel>AddressInfo/0/Address}"
-                        tooltip="{viewModel>AddressInfo/0/Address}"
-                        maxLines="1"
-                    /> -->
-                </t:template>
-            </t:Column>
-
             <!-- 국가 -->
             <t:Column
                 id="CityCountryRegion"
                 hAlign="Center"
-                width="130px"
+                width="160px"
                 visible="{viewModel>/ColSettings/ColInfo/CityCountryRegion/visible}"
                 headerMenu="menu"
                 sortProperty="CityCountryRegion"
@@ -324,14 +302,19 @@
             >
                 <Label text="{i18n>main_list_CityCountryRegion}" />
                 <t:template>
-                    <Input
-                        textAlign="Begin"
+                    <ComboBox
+                        app:fcCode="fcTableCountry"
+                        selectionChange="onPAI"
                         value="{viewModel>AddressInfo/0/City/CountryRegion}"
-                        change="onPAI"
-                        app:fcCode="fcTableAddressInfo"
-                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['Country']}"
-                    />
-                    <!-- <Text text="{viewModel>AddressInfo/0/City/CountryRegion}" /> -->
+                        tooltip="{viewModel>AddressInfo/0/City/CountryRegion}"
+                        items="{viewModel>/Search/TableCountry}"
+                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['City']}"
+                    >
+                        <core:Item
+                            key="{viewModel>CountryRegion}"
+                            text="{viewModel>CountryRegion}"
+                        />
+                    </ComboBox>
                 </t:template>
             </t:Column>
 
@@ -347,14 +330,54 @@
             >
                 <Label text="{i18n>main_list_CityName}" />
                 <t:template>
-                    <Input
-                        textAlign="Begin"
+                    <ComboBox
+                        app:fcCode="fcTableCity"
+                        selectionChange="onPAI"
+                        value="{viewModel>AddressInfo/0/City/Name}" 
+                        items="{viewModel>/Search/CityName}"
+                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['City']}"
+                    >
+                        <core:Item
+                            key="{viewModel>CityName}"
+                            text="{viewModel>CityName}"
+                        />
+                    </ComboBox>
+                    <!-- <Input
+                        showValueHelp="true"
                         value="{viewModel>AddressInfo/0/City/Name}"
+                        valueHelpRequest=".onPAI"
+                        valueHelpOnly='true'
+                        app:fcCode="fcTableCity"
+                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['City']}"
+                    /> -->
+                    <!-- <Text text="{viewModel>AddressInfo/0/City/Name}" /> -->
+                </t:template>
+            </t:Column>
+
+            <!-- 주소 -->
+            <t:Column
+                id="Address"
+                hAlign="Begin"
+                width="160px"
+                visible="{viewModel>/ColSettings/ColInfo/Address/visible}"
+                headerMenu="menu"
+                sortProperty="Address"
+                filterProperty="Address"
+            >
+                <Label text="{i18n>main_list_Address}" />
+                <t:template>
+                    <!-- <Input
+                        textAlign="Begin"
+                        value="{viewModel>AddressInfo/0/Address}"
                         change="onPAI"
                         app:fcCode="fcTableAddressInfo"
-                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['City']}"
+                        editable="{= %{viewModel>Chkdel}? false : ${viewModel>/Const/Editable}[${viewModel>State}]['Address']}"
+                    /> -->
+                    <Text
+                        text="{viewModel>AddressInfo/0/Address}"
+                        tooltip="{viewModel>AddressInfo/0/Address}"
+                        maxLines="1"
                     />
-                    <!-- <Text text="{viewModel>AddressInfo/0/City/Name}" /> -->
                 </t:template>
             </t:Column>
 

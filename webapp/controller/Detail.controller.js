@@ -21,6 +21,7 @@ sap.ui.define(
       ControlID: {
         Table: {
           T_TripTable: "T_TripTable",
+          T_ShareTable: "T_ShareTable",
         },
         List: {
           S_TripList: "S_TripList",
@@ -82,13 +83,22 @@ sap.ui.define(
         try {
           switch (sCode) {
             // Botton Control
+            case "fcShareTrip":
+              this._fcShareTrip(event);
+              break;
             case "fcOpenTag":
               this._fcOpenTag(event);
               break;
             case "fcOpenTripUser":
               this._fcOpenTripUser(event);
-              break; 
-              
+              break;
+            case "fcOpenShareTrip":
+              this._fcOpenShareTrip(event);
+              break;
+            case "fcCloseShareTrip":
+              this._fcCloseShareTrip(event);
+              break;
+
             // Navigation
             case "fcNavBack":
               this._fcNavBack(event);
@@ -174,10 +184,10 @@ sap.ui.define(
         const oSelectedContext = event
             .getSource()
             .getBindingContext("viewModel"),
-          oSelectedObj = _.cloneDeep(oSelectedContext.getObject());
+          oSelectedItem = _.cloneDeep(oSelectedContext.getObject());
 
         const vUserName = this.viewModel.getDetailData().UserName;
-        const vTripId = oSelectedObj.TripId;
+        const vTripId = oSelectedItem.TripId;
 
         if (!vTripId.toString() || vTripId.length === 0) {
           this.showError(this.getI18nText("ErrMsg010"));
@@ -252,6 +262,164 @@ sap.ui.define(
             )
           );
         });
+      },
+
+      _fcShareTrip: function (event) {
+        const oTable = this.getView().byId(this.ControlID.Table.T_TripTable),
+          aSelectedData = oTable.getSelectedIndices(),
+          oUserItem = this.viewModel.getDetailData();
+
+        if (!aSelectedData || aSelectedData.length === 0) {
+          this.showError(this.getI18nText("ErrMsg007"));
+          return;
+        }
+
+        this.dh.odata
+          ._ReadDetailTableView(oUserItem.UserName)
+          .then((oResult) => {
+            const aNewResult = oResult.Friends;
+
+            this.viewModel.setShareTableItems(aNewResult);
+
+            if (aNewResult.length === 0) {
+              this.showError(this.getI18nText("ErrMsg010"));
+            }
+          })
+          .catch((error) => {
+            this._handleError(error);
+          })
+          .finally(() => {
+            this.callPopupFragment("ShareTripPopup");
+          });
+      },
+
+      _fcOpenShareTrip: function (event) {
+        const oTable = this.getView().byId(this.ControlID.Table.T_ShareTable),
+          aSelectedData = oTable.getSelectedIndices();
+
+        let aUserNames = [];
+
+        aSelectedData.forEach((index) => {
+          const oSelectedItem = oTable.getContextByIndex(index).getObject();
+          if (oSelectedItem && oSelectedItem.UserName) {
+            aUserNames.push(oSelectedItem.UserName);
+          }
+        });
+
+        let aErrFields = [];
+
+        const promises = aUserNames.map((userName) => {
+          return this.dh.odata
+            ._ReadPeopleTripDetailTableView(userName)
+            .then((oResult) => {
+              if (oResult.Trips.length === 0) {
+                aErrFields.push(userName);
+              }
+            })
+            .catch((error) => {
+              this._handleError(error);
+            });
+        });
+
+        Promise.all(promises)
+          .then(() => {
+            if (aErrFields.length > 0) {
+              const vMsg = this.getI18nText("ErrMsg017", [
+                _.join(
+                  _.map(
+                    aErrFields,
+                    function (vField) {
+                      return this.getI18nText(vField);
+                    }.bind(this)
+                  ),
+                  ", "
+                ),
+              ]);
+              this.showError(vMsg);
+            } else {
+              this.viewModel.setFilterUserName(aUserNames);
+              this._fcCallShareTrip();
+            }
+          })
+          .catch((error) => {
+            this._handleError(error);
+          }); 
+      },
+
+      _fcCloseShareTrip: function (event) {
+        this.closePopupFragment("ShareTripPopup");
+      },
+
+      /*******************************************************************
+       * Call Action
+       *******************************************************************/
+      _fcCallShareTrip: function () {
+        this.viewModel.setBusy(true);
+
+        const oTable = this.getView().byId(this.ControlID.Table.T_TripTable),
+          aSelectedData = oTable.getSelectedIndices();
+
+        const oSelectedItem = oTable
+          .getContextByIndex(aSelectedData[0])
+          .getObject();
+        const oUserItem = this.viewModel.getDetailData();
+
+        if (!oUserItem.UserName || !oSelectedItem.TripId.toString()) {
+          this.showError(this.getI18nText("ErrMsg017"));
+          return;
+        }
+
+        const aUserNames = this.viewModel.getFilterUserName();
+
+        let iSuccessCount = 0;
+        const iTotalCount = aUserNames.length;
+
+        aUserNames.forEach((sUserName) => {
+          const oParam = {
+            PeopleInstance: oUserItem.UserName,
+            UserName: sUserName,
+            TripId: oSelectedItem.TripId,
+          };
+
+          const oContext = this.dh.odata.CallShareTrip(oParam);
+
+          oContext
+            .execute()
+            .then(() => {
+              iSuccessCount += 1;
+              if (iSuccessCount === iTotalCount) {
+                sap.m.MessageToast.show("공유 성공");
+                this.closePopupFragment("ShareTripPopup");
+              }
+            })
+            .catch((error) => {
+              this._handleError(error);
+              this.viewModel.setBusy(false);
+            })
+            .finally(() => {
+              this.viewModel.setBusy(false);
+            });
+        });
+        // const oParam = {
+        //   PeopleInstance: oUserItem.UserName,
+        //   UserName: this.viewModel.getFilterUserName(),
+        //   TripId: oSelectedItem.TripId,
+        // };
+
+        // const oContext = this.dh.odata.CallShareTrip(oParam);
+
+        // oContext
+        //   .execute()
+        //   .then(function () {
+        //     sap.m.MessageToast.show("공유성공");
+        //   })
+        //   .catch((error) => {
+        //     this._handleError(error);
+        //     this.viewModel.setBusy(false);
+        //   })
+        //   .finally(() => {
+        //     this.viewModel.setBusy(false);
+        //   });
       },
 
       /*******************************************************************
